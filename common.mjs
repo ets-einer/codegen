@@ -16,7 +16,9 @@ export class Field {
 
     getType() {
         switch (this.fieldInputType) {
-            case "text" || "email":
+            case "text":
+                return 'string'
+            case "email":
                 return 'string'
             case "number":
                 return 'number'
@@ -24,8 +26,11 @@ export class Field {
     }
 }
 
-export const createFile = (name, data) => {
-    const stream = createWriteStream(`forms/${name}`)
+export const createFile = (name, data, folder) => {
+    fs.mkdir(folder, { recursive: true }, (err) => {
+        if (err) throw err;
+    });
+    const stream = createWriteStream(`${folder}${name}`)
     stream.write(data)
 }
 

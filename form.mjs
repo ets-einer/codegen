@@ -3,14 +3,14 @@ import { createFile, Field, getBase } from "./common.mjs";
 
 /**
  * 
- * @param {Field[]} fields
+ * @param {Field[]} fields 
  */
 const fieldsToJSX = (fields) => {
     fields = fields.map(field => {
         return `<input type="${field.fieldInputType}" name="${field.fieldName}" value={formObject.${field.fieldName}} onChange={handleChange} />`
     })
 
-    return fields.join('\n\t    ')
+    return fields.join('\n            ')
 }
 
 /**
@@ -22,7 +22,7 @@ const fieldsToInterface = (fields) => {
         return `${field.fieldName}: ${field.fieldType}`
     })
 
-    return fields.join('\n    ')
+    return fields.join('\n\t')
 }
 
 /**
@@ -51,7 +51,7 @@ const parseFields = (name, _fields) => {
         .replace(/\%INPUTS_JSX%/g, fieldsToJSX(fields))
         .replace(/\%INPUTS_INTERFACE%/g, fieldsToInterface(fields))
 
-    createFile(format(name) + ".tsx", baseString)
+    createFile(format(name) + ".tsx", baseString, 'src/forms/')
 }
 
 export default parseFields;

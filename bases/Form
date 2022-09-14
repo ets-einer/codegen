@@ -1,13 +1,19 @@
 import React from 'react'
 
-interface %FORM_NAME%FormProps {
+interface %FORM_NAME%FormData {
     %INPUTS_INTERFACE%
 }
 
+interface %FORM_NAME%FormProps {
+    formObject: %FORM_NAME%FormData
+    setFormObject: React.Dispatch<React.SetStateAction<%FORM_NAME%FormData>>
+}
 
-const %FORM_NAME%Form = (formObject: %FORM_NAME%FormProps, setFormObject:  React.Dispatch<React.SetStateAction<%FORM_NAME%FormProps>>) => {
+
+const %FORM_NAME%Form = ({formObject, setFormObject}: %FORM_NAME%FormProps  ) => {
 
     const handleChange = (e: any) => {
+        e.preventDefault()
         setFormObject({ ...formObject, [e.target.name]: e.target.value })
     }
 
@@ -18,6 +24,7 @@ const %FORM_NAME%Form = (formObject: %FORM_NAME%FormProps, setFormObject:  React
     return (
         <form onSubmit={handleSubmit}>
             %INPUTS_JSX%
+            <button type="submit">Submit</button>
         </form>
     );
 }
