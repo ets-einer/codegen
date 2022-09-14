@@ -1,0 +1,25 @@
+import React from 'react'
+
+interface %FORM_NAME%FormProps {
+    %INPUTS_INTERFACE%
+}
+
+
+const %FORM_NAME%Form = (formObject: %FORM_NAME%FormProps, setFormObject:  React.Dispatch<React.SetStateAction<%FORM_NAME%FormProps>>) => {
+
+    const handleChange = (e: any) => {
+        setFormObject({ ...formObject, [e.target.name]: e.target.value })
+    }
+
+    const handleSubmit = () => {
+        console.log(formObject)
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            %INPUTS_JSX%
+        </form>
+    );
+}
+
+export default %FORM_NAME%Form;
