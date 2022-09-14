@@ -3,7 +3,7 @@ import { createFile, Field, getBase } from "./common.mjs";
 
 /**
  * 
- * @param {Field[]} fields 
+ * @param {Field[]} fields
  */
 const fieldsToJSX = (fields) => {
     fields = fields.map(field => {
