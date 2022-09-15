@@ -22,6 +22,11 @@ export class Field {
                 return 'string'
             case "number":
                 return 'number'
+            case "pass":
+                this.fieldInputType = 'password'
+                return 'string'
+            case "date":
+                return 'Date'
         }
     }
 }
@@ -33,5 +38,6 @@ export const createFile = (name, data, folder) => {
     const stream = createWriteStream(`${folder}${name}`)
     stream.write(data)
 }
+
 
 export const getBase = (basePath) => fs.readFileSync(__dirname + basePath).toString()
