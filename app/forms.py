@@ -1,6 +1,7 @@
 from typing import List
 from rich import print
 import os
+from .common import get_base
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -38,11 +39,6 @@ class Field:
                 return "0"
             case "Date":
                 return "new Date()"
-
-
-def get_base(path: str) -> str:
-    with open(path, "r", encoding="utf-8") as f:
-        return f.read()
 
 
 def fields_to_jsx(fields: List[Field]) -> str:

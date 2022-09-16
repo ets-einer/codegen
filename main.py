@@ -1,6 +1,6 @@
 import typer
 from rich import print
-from app import forms
+from app import forms, pages
 
 app = typer.Typer(name="mkg")
 
@@ -14,6 +14,24 @@ def form(name: str, fields: str):
     Usage: mkg form cadastro name,email:email,idade:number,nascimento:date
     """
     forms.generate_form(name, fields)
+
+
+@app.command()
+def page(name: str):
+    """
+    Generates a page component in the src/pages directory.
+    Usage: mkg page login
+    """
+    pages.generate_page(name)
+
+
+@app.command()
+def component(name: str):
+    """
+    Generates a component in the src/components directory.
+    Usage: mkg component footer
+    """
+    pass
 
 
 @app.command()
