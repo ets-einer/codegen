@@ -48,9 +48,9 @@ def get_base(path: str) -> str:
 def fields_to_jsx(fields: List[Field]) -> str:
     jsx_list = []
     for field in fields:
-        line = f'<label htmlFor="{field.name}">{field.name.capitalize()}</label>\n\t\t    <Field id="{field.name}" type={field.input_type} name="{field.name}" placeholder={field.name} />'
+        line = f'<label htmlFor="{field.name}">{field.name.capitalize()}</label>\n\t\t\t\t\t<Field id="{field.name}" type="{field.input_type}" name="{field.name}" placeholder="{field.name}" />'
         jsx_list.append(line)
-    return "\n\t\t    ".join(jsx_list)
+    return "\n\t\t\t\t\t".join(jsx_list)
 
 
 def fields_to_interface(fields: List[Field]) -> str:
@@ -66,7 +66,7 @@ def fields_to_values(fields: List[Field]) -> str:
     for field in fields:
         line = f"{field.name}: {field.initial_value}"
         types_list.append(line)
-    return "\n\t\t    ".join(types_list)
+    return ",\n\t\t\t\t\t".join(types_list)
 
 
 def generate_form(name: str, _fields: str):
@@ -88,3 +88,5 @@ def generate_form(name: str, _fields: str):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w", encoding="utf-8") as f:
         f.write(content)
+
+    print(f"[bold green]Generated file {filename} with success.[/bold green]")
