@@ -1,0 +1,32 @@
+import React from 'react'
+import { Formik, Field, Form, FormikHelpers } from 'formik';
+
+interface %FORM_NAME%Values {
+    %INPUTS_INTERFACE%
+}
+
+const %FORM_NAME%Form = () => {
+
+    const handleSubmit = (values: %FORM_NAME%Values, 
+    { setSubmitting }: FormikHelpers<%FORM_NAME%Values>) => {
+        console.log(values)
+    }
+
+    return (
+        <div>
+            <h1>%FORM_NAME%</h1>
+            <Formik
+                initialValues={{
+                    %INITIAL_VALUES%
+                }}
+                onSubmit={handleSubmit}>
+                <Form>
+                    %INPUTS_JSX%
+                    <button type="submit">Submit</button>
+                </Form>
+            </Formik>
+        </div>
+    );
+}
+
+export default %FORM_NAME%Form;
