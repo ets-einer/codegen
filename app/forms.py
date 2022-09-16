@@ -89,4 +89,4 @@ def generate_form(name: str, _fields: str):
     with open(filename, "w", encoding="utf-8") as f:
         f.write(content)
 
-    print(f"[bold green]Generated file {filename} with success.[/bold green]")
+    print(f"[green]Generated file [bold]{filename}[/bold] with success.[/green]")
