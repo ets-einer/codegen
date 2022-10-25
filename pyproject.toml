@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "monkeygen"
+version = "0.0.1"
+description = "A react typescript code gen tool."
+authors = [{ name = "Viktor Marinho", email = "<viktormpcs@gmail.com>" }]
+dependencies = [
+    "click = ^8.1.3",
+    "typer = ^0.6.1",
+    "colorama = ^0.4.5",
+    "commonmark = ^0.9.1",
+    "Pygments = ^2.13.0",
+    "rich = ^12.5.1",
+]
+readme = "README.md"
+
+[project.scripts]
+mkg = "app.__main__:app"
