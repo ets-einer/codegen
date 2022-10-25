@@ -7,15 +7,18 @@ from .common import get_base
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 CONTEXT = {
-    'include_labels': False,
-    'include_placeholders': False,
-    'include_validation': True
+    "include_labels": False,
+    "include_placeholders": False,
+    "include_validation": True,
 }
+
 
 def include(text: str):
     class _:
-        when = lambda cond : text if cond else ''
+        when = lambda cond: text if cond else ""
+
     return _
+
 
 class Field:
     def __init__(self, name, type) -> None:
@@ -56,10 +59,23 @@ def fields_to_jsx(fields: List[Field]) -> str:
     jsx_list = []
     for field in fields:
         line = (
-            include(f'<label htmlFor="{field.name}">{field.name.capitalize()}</label>\n\t\t\t\t\t').when(CONTEXT["include_labels"]) + 
-            f'<Field id="{field.name}" type="{field.input_type}" name="{field.name}"' +
-            include(f' placeholder="{field.name}"').when(CONTEXT["include_placeholders"]) +
-            ' />'        
+            include(
+                f'<label htmlFor="{field.name}">{field.name.capitalize()}</label>\n\t\t\t\t\t'
+            ).when(CONTEXT["include_labels"])
+            + f'<Field id="{field.name}" type="{field.input_type}" name="{field.name}"'
+            + include(f' placeholder="{field.name}"').when(
+                CONTEXT["include_placeholders"]
+            )
+            + " />"
+            + include(
+                "\n\t\t\t\t\t{errors."
+                + field.name
+                + " && touched."
+                + field.name
+                + " ? (\n\t\t\t\t\t\t<div>{errors."
+                + field.name
+                + "}</div>\n\t\t\t\t\t) : null}"
+            ).when(CONTEXT["include_errors"])
         )
         jsx_list.append(line)
     return "\n\t\t\t\t\t".join(jsx_list)
@@ -89,23 +105,21 @@ const CadastroSchema = Yup.object().shape({
 });\n"""
 
     for field in fields:
-        fields_string.append(
-            f'{field.name}: Yup.{field.type.lower()}(),\n\t'
-        )
+        fields_string.append(f"{field.name}: Yup.{field.type.lower()}(),\n\t")
 
     fields_string[-1] = fields_string[-1][:-3]
 
-    return base.replace("%FIELDS%", ''.join(fields_string))
+    return base.replace("%FIELDS%", "".join(fields_string))
 
 
 def generate_form(
-    name: str, 
-    _fields: str, 
-    include_label: bool, 
+    name: str,
+    _fields: str,
+    include_label: bool,
     include_placeholder: bool,
     include_validation: bool,
-    include_errors: bool
-    ):
+    include_errors: bool,
+):
 
     CONTEXT["include_labels"] = include_label
     CONTEXT["include_placeholders"] = include_placeholder
@@ -123,9 +137,32 @@ def generate_form(
         .replace("%INPUTS_JSX%", fields_to_jsx(fields))
         .replace("%INPUTS_INTERFACE%", fields_to_interface(fields))
         .replace("%INITIAL_VALUES%", fields_to_values(fields))
-        .replace("%VALIDATION_JSX%", include(f'\n\t\t\t\tvalidationSchema={"{" + name.capitalize() + "Schema}"}').when(CONTEXT["include_validation"]))
-        .replace("%YUP_IMPORT%", include("import * as Yup from 'yup';").when(CONTEXT["include_validation"]))
-        .replace("%VALIDATION_SCHEMA%", include(generate_validation_schema(fields, name)).when(CONTEXT["include_validation"]))
+        .replace(
+            "%VALIDATION_JSX%",
+            include(
+                f'\n\t\t\t\tvalidationSchema={"{" + name.capitalize() + "Schema}"}'
+            ).when(CONTEXT["include_validation"]),
+        )
+        .replace(
+            "%YUP_IMPORT%",
+            include("import * as Yup from 'yup';").when(CONTEXT["include_validation"]),
+        )
+        .replace(
+            "%VALIDATION_SCHEMA%",
+            include(generate_validation_schema(fields, name)).when(
+                CONTEXT["include_validation"]
+            ),
+        )
+        .replace(
+            "%ERRORS_CLOSE_CALLBACK%",
+            include("\n\t\t\t\t)}").when(CONTEXT["include_errors"]),
+        )
+        .replace(
+            "%ERRORS_OPEN_CALLBACK%",
+            include("\n\t\t\t\t{({ errors, touched }) => (").when(
+                CONTEXT["include_errors"]
+            ),
+        )
     )
 
     filename = f"./src/forms/{name.capitalize()}.tsx"
