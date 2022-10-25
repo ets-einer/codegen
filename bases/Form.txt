@@ -1,5 +1,6 @@
 import { Formik, Field, Form, FormikHelpers } from 'formik';
-
+%YUP_IMPORT%
+%VALIDATION_SCHEMA%
 interface %FORM_NAME%Values {
     %INPUTS_INTERFACE%
 }
@@ -17,7 +18,7 @@ const %FORM_NAME%Form = () => {
             <Formik
                 initialValues={{
                     %INITIAL_VALUES%
-                }}
+                }}%VALIDATION_JSX%
                 onSubmit={handleSubmit}>
                 <Form>
                     %INPUTS_JSX%

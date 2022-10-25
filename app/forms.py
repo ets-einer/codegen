@@ -1,3 +1,4 @@
+import string
 from typing import List
 from rich import print
 import os
@@ -5,6 +6,16 @@ from .common import get_base
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+CONTEXT = {
+    'include_labels': False,
+    'include_placeholders': False,
+    'include_validation': True
+}
+
+def include(text: str):
+    class _:
+        when = lambda cond : text if cond else ''
+    return _
 
 class Field:
     def __init__(self, name, type) -> None:
@@ -44,7 +55,12 @@ class Field:
 def fields_to_jsx(fields: List[Field]) -> str:
     jsx_list = []
     for field in fields:
-        line = f'<label htmlFor="{field.name}">{field.name.capitalize()}</label>\n\t\t\t\t\t<Field id="{field.name}" type="{field.input_type}" name="{field.name}" placeholder="{field.name}" />'
+        line = (
+            include(f'<label htmlFor="{field.name}">{field.name.capitalize()}</label>\n\t\t\t\t\t').when(CONTEXT["include_labels"]) + 
+            f'<Field id="{field.name}" type="{field.input_type}" name="{field.name}"' +
+            include(f' placeholder="{field.name}"').when(CONTEXT["include_placeholders"]) +
+            ' />'        
+        )
         jsx_list.append(line)
     return "\n\t\t\t\t\t".join(jsx_list)
 
@@ -65,7 +81,36 @@ def fields_to_values(fields: List[Field]) -> str:
     return ",\n\t\t\t\t\t".join(types_list)
 
 
-def generate_form(name: str, _fields: str):
+def generate_validation_schema(fields: List[Field], name: str) -> str:
+    fields_string = []
+    base = """
+const CadastroSchema = Yup.object().shape({
+    %FIELDS%
+});\n"""
+
+    for field in fields:
+        fields_string.append(
+            f'{field.name}: Yup.{field.type.lower()}(),\n\t'
+        )
+
+    fields_string[-1] = fields_string[-1][:-3]
+
+    return base.replace("%FIELDS%", ''.join(fields_string))
+
+
+def generate_form(
+    name: str, 
+    _fields: str, 
+    include_label: bool, 
+    include_placeholder: bool,
+    include_validation: bool,
+    include_errors: bool
+    ):
+
+    CONTEXT["include_labels"] = include_label
+    CONTEXT["include_placeholders"] = include_placeholder
+    CONTEXT["include_validation"] = include_validation
+    CONTEXT["include_errors"] = include_errors
 
     fields = []
     for field in _fields.split(","):
@@ -78,6 +123,9 @@ def generate_form(name: str, _fields: str):
         .replace("%INPUTS_JSX%", fields_to_jsx(fields))
         .replace("%INPUTS_INTERFACE%", fields_to_interface(fields))
         .replace("%INITIAL_VALUES%", fields_to_values(fields))
+        .replace("%VALIDATION_JSX%", include(f'\n\t\t\t\tvalidationSchema={"{" + name.capitalize() + "Schema}"}').when(CONTEXT["include_validation"]))
+        .replace("%YUP_IMPORT%", include("import * as Yup from 'yup';").when(CONTEXT["include_validation"]))
+        .replace("%VALIDATION_SCHEMA%", include(generate_validation_schema(fields, name)).when(CONTEXT["include_validation"]))
     )
 
     filename = f"./src/forms/{name.capitalize()}.tsx"
