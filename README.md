@@ -71,3 +71,10 @@ const RegisterForm = () => {
 
 export default RegisterForm;
 ```
+
+---
+
+## Installation
+```bash
+    git clone https://github.com/tcc-ets/codegen.git && cd codegen && pip install .
+```
