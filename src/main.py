@@ -56,11 +56,5 @@ def component(name: str):
     pass
 
 
-@app.command()
-def test(name: str):
-    """prints your name"""
-    print(name)
-
-
 if __name__ == "__main__":
     app()
