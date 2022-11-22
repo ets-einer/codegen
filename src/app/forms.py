@@ -2,7 +2,7 @@ import string
 from typing import List
 from rich import print
 import os
-from .common import get_base
+from .common import get_base, include
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -11,13 +11,6 @@ CONTEXT = {
     "include_placeholders": False,
     "include_validation": True,
 }
-
-
-def include(text: str):
-    class _:
-        when = lambda cond: text if cond else ""
-
-    return _
 
 
 class Field:

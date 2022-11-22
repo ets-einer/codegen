@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import typer
 from rich import print
 from app import forms, pages
@@ -32,12 +34,17 @@ def form(
 
 
 @app.command()
-def page(name: str):
+def page(
+    name: str,
+    route: bool = typer.Option(
+        False, help="Specifies if a different route component should be generated too."
+    ),
+):
     """
     Generates a page component in the src/pages directory.
     Usage: mkg page login
     """
-    pages.generate_page(name)
+    pages.generate_page(name, route)
 
 
 @app.command()

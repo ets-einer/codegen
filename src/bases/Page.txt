@@ -1,0 +1,9 @@
+%ROUTE_COMPONENT%
+
+const %PAGE_NAME%Page = () => {
+    return (
+        <div></div>
+    )
+}
+
+export default %EXPORT_DEFAULT%;
