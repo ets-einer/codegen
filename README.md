@@ -6,6 +6,20 @@ Includes Formik + Yup support for generating forms
 
 Don't think about form or inputs state, writing boilerplate like labels, typescript interfaces or error displays. Just style the form to your liking and write the dead simple Yup validations, and Formik gives you a type-safe object so you can post to your back-end or anything you would like.
 
+---
+
+## Installation
+
+Windows
+
+```bash
+cmd /k "git clone https://github.com/tcc-ets/codegen.git && cd codegen && pip install . && cd .. && rmdir /s /q codegen"
+```
+
+---
+
+## Usage
+
 Example: 
 
     mkg form register --errors --placeholder name,email:email,age:number
@@ -70,14 +84,4 @@ const RegisterForm = () => {
 }
 
 export default RegisterForm;
-```
-
----
-
-## Installation
-
-Windows
-
-```bash
-cmd /k "git clone https://github.com/tcc-ets/codegen.git && cd codegen && pip install . && cd .. && rmdir /s /q codegen"
 ```
