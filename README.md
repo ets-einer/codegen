@@ -75,6 +75,9 @@ export default RegisterForm;
 ---
 
 ## Installation
+
+Windows
+
 ```bash
-git clone https://github.com/tcc-ets/codegen.git && cd codegen && pip install .
+cmd /k "git clone https://github.com/tcc-ets/codegen.git && cd codegen && pip install . && cd .. && rm -r codegen"
 ```
